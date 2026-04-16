@@ -4,6 +4,9 @@ import cors from "cors";
 const app = express();
 
 app.use(express.json());
+if (!process.env.FRONT_END_URL) {
+  throw new Error("FRONT_END_URL is not defined");
+}
 app.use(
   cors({
     origin: process.env.FRONT_END_URL,

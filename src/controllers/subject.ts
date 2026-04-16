@@ -1,15 +1,21 @@
 import { and, desc, eq, getTableColumns, ilike, or, sql } from "drizzle-orm";
+import { Request, Response } from "express";
 
-import { departments, subjects } from "../db/schema";
-import { db } from "../db";
+import { db } from "../db/index.js";
+import { departments, subjects } from "../db/schema/app.js";
 
-export const getAllSubject = async (req, res) => {
+export const getAllSubject = async (req: Request, res: Response) => {
   try {
     const { search, department, page = 1, limit = 10 } = req.query;
 
     // 🔥 pagination safe conversion
-    const currentPage = Math.max(1, parseInt(page));
-    const limitPerPage = Math.max(1, parseInt(limit));
+    const toPositiveInt = (value: unknown, fallback: number) => {
+      const parsed = Number(value);
+      return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+    };
+
+    const currentPage = toPositiveInt(page, 1);
+    const limitPerPage = Math.min(toPositiveInt(limit, 10), 100);
     const offset = (currentPage - 1) * limitPerPage;
 
     // 🔥 dynamic filters
@@ -72,7 +78,7 @@ export const getAllSubject = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Server Error",
-      error: error.message,
+      error: "Internal server error",
     });
-  }
-};
+  } // ✅ try block close
+}; // ✅ function close
