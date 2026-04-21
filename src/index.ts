@@ -9,12 +9,12 @@ if (!process.env.FRONT_END_URL) {
 }
 app.use(
   cors({
-    origin: process.env.FRONT_END_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    origin: process.env.FRONT_END_URL || "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-app.use("/subjects", subjectRouter);
+app.use("/api", subjectRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Class Management System API!");
