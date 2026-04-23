@@ -1,7 +1,11 @@
+import AgentApi from "apminsight";
+AgentApi.config();
 import express from "express";
 import subjectRouter from "./routes/subject.js";
 import cors from "cors";
 import securityMiddleware from "./middleware/security.js";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth.js";
 const app = express();
 
 app.use(express.json());
@@ -15,6 +19,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(securityMiddleware);
 app.use("/api", subjectRouter);
 
