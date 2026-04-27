@@ -6,6 +6,8 @@ import cors from "cors";
 import securityMiddleware from "./middleware/security.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
+import userRouter from "./routes/users.js";
+import classesRouter from "./routes/classes.js";
 const app = express();
 
 app.use(express.json());
@@ -19,9 +21,11 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-app.all("/api/auth/*splat", toNodeHandler(auth));
-app.use(securityMiddleware);
+// app.all("/api/auth/*splat", toNodeHandler(auth));
+// app.use(securityMiddleware);
 app.use("/api", subjectRouter);
+app.use("/api", userRouter);
+app.use("/api", classesRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Class Management System API!");
