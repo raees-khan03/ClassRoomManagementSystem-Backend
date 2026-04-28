@@ -16,13 +16,13 @@ if (!process.env.FRONT_END_URL) {
 }
 app.use(
   cors({
-    origin: process.env.FRONT_END_URL || "http://localhost:5173",
+    origin: process.env.FRONT_END_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-// app.all("/api/auth/*splat", toNodeHandler(auth));
-// app.use(securityMiddleware);
+app.all("/api/auth/*splat", toNodeHandler(auth));
+app.use(securityMiddleware);
 app.use("/api", subjectRouter);
 app.use("/api", userRouter);
 app.use("/api", classesRouter);

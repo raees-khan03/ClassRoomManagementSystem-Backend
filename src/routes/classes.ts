@@ -1,8 +1,9 @@
 import express from "express";
-import getAllClasses from "../controllers/classes.js";
+import { getAllClasses, postClass } from "../controllers/classes.js";
 
 const classesRouter = express.Router();
 
-classesRouter.post("/classes", getAllClasses);
+classesRouter.post("/classes", postClass);
+classesRouter.get("/classes", getAllClasses);
 
 export default classesRouter;
